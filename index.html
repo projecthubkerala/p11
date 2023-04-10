@@ -1,0 +1,70 @@
+<html>
+    <head>
+        <title>Medical Image Forgery Detection</title>
+        
+     <style>
+      .med{
+        width: 400px;
+       
+        background: linear-gradient(rgba(169, 221, 236, 0.5),rgba(138, 240, 238, 0.5)),transparent;
+        padding: 40px;
+        margin: 10% auto 0;
+        text-align: center;
+        border-radius: 20px;
+    }
+    .med h3{
+        color: rgb(1, 10, 10);
+        margin-bottom: 30px;
+    
+        
+    }
+    body{
+        background-image: url("med.jpg");
+        font-family: sans-serif; 
+        background-size: cover;
+        background-attachment: fixed;
+        text-align: center;
+      }
+    h1{
+        padding-top: 70px;    
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-size: 1.5cm;
+        text-decoration: rgb(1, 10, 10);
+    }  
+    input[type=file]{
+        border-radius: 20px;
+        color: #fff;
+        width: 60%;
+        padding: 10px;
+        font-size: 15px;
+        cursor: pointer;
+        background-color: black;
+       
+    }
+     </style>   
+    </head>
+    <body>
+        <h1>MEDICAL IMAGE <br>FORGERY DETECTION</h1>
+        <div class="med">
+          <h3>Upload image</h3>
+          <!-- <form name="" method="" action="">
+            <input type="file" accept="image/*">
+          </form>
+
+          <form action="user">
+            <input type="file"  name="image" required><br>
+            <input type="submit">
+          </form>-->
+
+          <form action="/uploadfile/" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*">
+      
+            <button type="submit">Upload</button>
+        </form>
+       
+    </div>
+
+    </body>
+</html>
+ 
+<!--accept="image/*"-->
