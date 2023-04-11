@@ -177,6 +177,8 @@ async def create_upload_file(file: UploadFile = File(...),):
   
 
     y_pred_class1 = np.argmax(y_pred1, axis= 1)[0]
+    y_pred_class2 = class_names[y_pred_class]
+
 
     confidence= np.amax(y_pred) *100
     
@@ -184,6 +186,7 @@ async def create_upload_file(file: UploadFile = File(...),):
     <html>
         <body>
             <h1>Upload Successful!</h1>
+            <p> Class: {y_pred_class2} </p>
             <p>ConfidencePercentage: {confidence}</p>
         </body>
     </html>
