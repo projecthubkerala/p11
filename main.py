@@ -19,7 +19,7 @@ from keras.optimizers import Adam
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix
 from tensorflow.keras.preprocessing import image
-
+from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI, File, UploadFile, Form
 from fastapi.responses import FileResponse
 from fastapi.responses import HTMLResponse
@@ -168,29 +168,39 @@ async def create_upload_file(file: UploadFile = File(...),):
     file_path = f"{file.filename}"
     with open(file_path, "wb") as buffer:
         buffer.write(await file.read())
-
+    app.mount("/", StaticFiles(directory="/"), name="images")
     imagea =prepare_image (file_path)
-
+    
     image1 =imagea.reshape(-1, 128, 128, 3)
 
     y_pred1= model.predict(image1)
   
 
     y_pred_class1 = np.argmax(y_pred1, axis= 1)[0]
-    y_pred_class2 = class_names[y_pred_class]
-
 
     confidence= np.amax(y_pred) *100
-    
-    html_content = f"""
+    print(file_path)
+    image1_path = "/images/{file_path}"
+    # image2_path = "/images/image2.jpg"
+    html_content = """
+    <!DOCTYPE html>
     <html>
-        <body>
-            <h1>Upload Successful!</h1>
-            <p> Class: {y_pred_class2} </p>
-            <p>ConfidencePercentage: {confidence}</p>
-        </body>
+    <head>
+        <title>Upload Successful!</title>
+    </head>
+    <body style="font-family: Arial, sans-serif; background-color: #f1f1f1; text-align: center;">
+        <h1 style="color: #4CAF50; margin-top: 50px;">Upload Successful!</h1>
+        <p style="font-size: 20px; color: #555; margin-bottom: 25px;">Confidence Percentage: {confidence}</p>
+        <div style="display: flex; justify-content: center; align-items: center; margin-top: 50px;">
+            <img style="margin: 10px; width: 300px; height: auto; border: 1px solid #ccc; border-radius: 5px;" src="" alt="Image 1" title="Title for Image 1">
+            <img style="margin: 10px; width: 300px; height: auto; border: 1px solid #ccc; border-radius: 5px;" src="" alt="Image 2" title="Title for Image 2">
+        </div>
+        <div style="font-size: 18px; font-weight: bold; color: #888; margin-top: 10px;">Title for both images</div>
+    </body>
     </html>
-    """
+    """.format(confidence=confidence)
+   
+ 
 
     # Return the file path and caption
     return HTMLResponse(content=html_content)
