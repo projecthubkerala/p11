@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Upload Successful!</title>
+</head>
+
+<body style="font-family: Arial, sans-serif; background-color: #f1f1f1; text-align: center;">
+    <h1 style="color: #4CAF50; margin-top: 50px;">Upload Successful!</h1>
+    <p style="font-size: 20px; color: #555; margin-bottom: 25px;">forged Percentage: {{forged}}</p>
+    <p style="font-size: 20px; color: #555; margin-bottom: 25px;">class name: {{classmame}}</p>
+
+    <div style="display: flex; justify-content: center; align-items: center; margin-top: 50px;">
+        <div>
+            <h1>Uploaded Image</h1>
+
+            <img style="margin: 10px; width: 300px; height: auto; border: 1px solid #ccc; border-radius: 5px;"
+                src="{{ file_name}}" alt="" title="Title for Image 1">
+        </div>
+        <div>
+            <h1>
+                Localisation
+            </h1>
+            <img style="margin: 10px; width: 300px; height: auto; border: 1px solid #ccc; border-radius: 5px;"
+                src="{{ localised }}" alt="Im" title="Title for Image 2">
+        </div>
+    </div>
+    <div style="font-size: 18px; font-weight: bold; color: #888; margin-top: 10px;">Title for both images</div>
+</body>
+
+</html>
