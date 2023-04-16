@@ -173,22 +173,23 @@ async def create_upload_file(file: UploadFile = File(...),):
     """
     # Save the file to disk
     file_path = f"{file.filename}"
+    base_path = os.getcwd()
+    localised_path = f"{base_path}/{file_path}"
     with open(file_path, "wb") as buffer:
         buffer.write(await file.read())
     app.mount("/", StaticFiles(directory="/"), name="images")
-    imagea = prepare_image(file_path)
+    imagea = prepare_image(localised_path)
 
     image1 = imagea.reshape(-1, 128, 128, 3)
 
     y_pred1 = model.predict(image1)
+    y_pred_class =np.argmax(y_pred, axis= 1)[0]
     y_pred_class2 = class_names[y_pred_class]
-    y_pred_class1 = np.argmax(y_pred1, axis=1)[0]
-    base_path = os.getcwd()
     print(base_path)
     confidence = np.amax(y_pred) * 100
+    print(confidence)
     forged = 100 - confidence
-    localised_path = f"{base_path}/{file_path}"
-    localised= convert_to_ela_image(localised_path,90)
+    localised = convert_to_ela_image(localised_path, 90)
 
     if os.path.exists(file_path):
         print("File exists!")
@@ -196,6 +197,6 @@ async def create_upload_file(file: UploadFile = File(...),):
         print("File does not exist!")
     template = Template(open("./uploded.html").read())
     rendered_template = template.render(
-        forged=forged, file_name=f'{base_path}/{file_path}' ,localised=f'{base_path}/temp_file_name.jpg' , classmame=y_pred_class2)
+        forged=forged, file_name=f'{base_path}/{file_path}', localised=f'{base_path}/temp_file_name.jpg', classmame=y_pred_class2)
     # Return the file path and caption
     return HTMLResponse(rendered_template, media_type="text/html")
