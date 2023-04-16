@@ -32,12 +32,13 @@ app = FastAPI()
 # %%
 
 
-# %%
-def convert_to_ela_image(path, quality):
-    temp_filename = 'temp_file_name.jpg'
+
+
+def convert_to_ela_image(input_path,  quality):
+    temp_filename = 'a.jpg'
     ela_filename = 'temp_ela.png'
 
-    image = PIL.Image.open(path).convert('RGB')
+    image = PIL.Image.open(input_path).convert('RGB')
     image.save(temp_filename, 'JPEG', quality=quality)
     temp_image = PIL.Image.open(temp_filename)
 
@@ -49,6 +50,8 @@ def convert_to_ela_image(path, quality):
         max_diff = 1
     scale = 255.0 / max_diff
     ela_image = ImageEnhance.Brightness(ela_image).enhance(scale)
+
+    ela_image.save('b.jpg')
     return ela_image
 
 # %%
@@ -183,20 +186,17 @@ async def create_upload_file(file: UploadFile = File(...),):
     image1 = imagea.reshape(-1, 128, 128, 3)
 
     y_pred1 = model.predict(image1)
-    y_pred_class =np.argmax(y_pred, axis= 1)[0]
-    y_pred_class2 = class_names[y_pred_class]
+    y_pred_class1 =np.argmax(y_pred1, axis= 1)[0]
+    y_pred_class2 = class_names[y_pred_class1]
     print(base_path)
-    confidence = np.amax(y_pred) * 100
+    confidence = f'{np.amax(y_pred1) *100:0.2f}'
     print(confidence)
-    forged = 100 - confidence
+    # forged = 100 - confidence
     localised = convert_to_ela_image(localised_path, 90)
 
-    if os.path.exists(file_path):
-        print("File exists!")
-    else:
-        print("File does not exist!")
+
     template = Template(open("./uploded.html").read())
     rendered_template = template.render(
-        forged=forged, file_name=f'{base_path}/{file_path}', localised=f'{base_path}/temp_file_name.jpg', classmame=y_pred_class2)
+        confidence=confidence, file_name=localised_path, localised=f'{base_path}/b.jpg', classmame=y_pred_class2)
     # Return the file path and caption
     return HTMLResponse(rendered_template, media_type="text/html")
